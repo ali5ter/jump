@@ -25,6 +25,11 @@ Alias provided:
     alias jl='jump --list'
 
 ## Install
-Just source the bash script...
+To try it out, just source the script...
 
     . ./jump.sh
+
+Or add the following to your `.bashrc` or `.bash_profile`...
+
+    [ -f ~/.jump.sh ] || curl -s -o ~/.jump.sh https://raw.githubusercontent.com/ali5ter/jump/master/jump.sh
+    source ~/.jump.sh
