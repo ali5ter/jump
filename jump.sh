@@ -85,8 +85,7 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
 
         --add|-a)
             [ -z "$2" ] && { echo -e "$help"; return 0; }
-            _jump_bookmark_exists "$2"
-            if [ $? -eq 0 ]; then
+            if  _jump_bookmark_exists "$2"; then
                 # shellcheck disable=SC2154
                 echo -e "${echo_yellow}Bookmark exists:${echo_normal}"
                 jump --list
@@ -99,8 +98,7 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
 
         --remove|-r)
             [ -z "$2" ] && { echo -e "$help"; return 0; }
-            _jump_bookmark_exists "$2"
-            if [ $? -eq 1 ]; then
+            if _jump_bookmark_exists "$2"; then
                 echo -e "${echo_yellow}No bookmark with this name:${echo_normal}"
                 jump --list
                 return 0
@@ -111,23 +109,26 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
             ;;
 
         --pathfor|-p)
+
+            local bm
+
             [ -z "$2" ] && { echo -e "$help"; return 0; }
-            _jump_bookmark_exists "$2"
-            if [ $? -eq 1 ]; then
+            if _jump_bookmark_exists "$2"; then
                 echo -e "${echo_yellow}No bookmark with this name:${echo_normal}"
                 jump --list
                 return 0
             else
-                local bm=$(grep "$2" "$JUMP_BOOKMARKS")
+                bm=$(grep "$2" "$JUMP_BOOKMARKS")
                 echo "${bm#*::}"
             fi
             ;;
 
         *)
-            _jump_bookmark_exists "$1"
-            if [ $? -eq 0 ]; then
-                local bm=$(grep "$1" "$JUMP_BOOKMARKS")
-                cd "${bm#*::}"
+            local bm
+            
+            if _jump_bookmark_exists "$1"; then
+                bm=$(grep "$1" "$JUMP_BOOKMARKS")
+                cd "${bm#*::}" || return 1
             else
                 echo -e "${echo_yellow}Unable to find '$1'${echo_normal}"
                 jump --list
@@ -136,5 +137,5 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
             ;;
     esac
 
-    return 1;
+    return 0
 }
