@@ -50,13 +50,13 @@ ${echo_bold_white}Jump to bookmarked directories${echo_normal}
 Usage:
 ${echo_bold_white}jump ${echo_underline_white}name${echo_normal} will move you to the\
  directory bookmarked with ${echo_underline_white}name${echo_normal}
-${echo_bold_white}jump -l|--list${echo_normal} to list the current bookmarked\
+${echo_bold_white}jump list${echo_normal} to list the current bookmarked\
  directories
-${echo_bold_white}jump -a|--add ${echo_underline_white}name${echo_normal} to bookmark the\
+${echo_bold_white}jump add ${echo_underline_white}name${echo_normal} to bookmark the\
 current directory with ${echo_underline_white}name${echo_normal}
-${echo_bold_white}jump -p|--pathfor ${echo_underline_white}name${echo_normal} to display the\
+${echo_bold_white}jump pathfor ${echo_underline_white}name${echo_normal} to display the\
 current directory stored for ${echo_underline_white}name${echo_normal}
-${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to remove a\
+${echo_bold_white}jump delete ${echo_underline_white}name${echo_normal} to delete a\
  bookmark
 "
 
@@ -64,7 +64,7 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
 
         ''|--help|-h)  echo -e "$help" ;;
 
-        --list|-l)
+        list)
 
             local current="►"
             local badDir="✖"
@@ -83,7 +83,7 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
             echo
             ;;
 
-        --add|-a)
+        add)
             [ -z "$2" ] && { echo -e "$help"; return 0; }
             if  _jump_bookmark_exists "$2"; then
                 # shellcheck disable=SC2154
@@ -96,7 +96,7 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
             fi
             ;;
 
-        --remove|-r)
+        delete)
             [ -z "$2" ] && { echo -e "$help"; return 0; }
             if _jump_bookmark_exists "$2"; then
                 echo -e "${echo_yellow}No bookmark with this name:${echo_normal}"
@@ -108,7 +108,7 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
             fi
             ;;
 
-        --pathfor|-p)
+        pathfor)
 
             local bm
 
