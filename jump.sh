@@ -84,27 +84,31 @@ ${echo_bold_white}jump delete ${echo_underline_white}name${echo_normal} to delet
             ;;
 
         add)
-            [ -z "$2" ] && { echo -e "$help"; return 0; }
+
+            local bms
+
+            [ -z "$2" ] && { echo -e "$help"; return 1; }
             if  _jump_bookmark_exists "$2"; then
                 # shellcheck disable=SC2154
-                echo -e "${echo_yellow}Bookmark exists:${echo_normal}"
+                echo -e "${echo_yellow}Bookmark exists${echo_normal}"
                 jump list
-                return 0
+                return 1
             else
                 echo "$2"'::'"$PWD" >> "$JUMP_BOOKMARKS"
+                bms=$(sort "$JUMP_BOOKMARKS") && echo "$bms" > "$JUMP_BOOKMARKS"
                 echo -e "${echo_cyan}Bookmark added${echo_normal}"
             fi
             ;;
 
         delete)
-            [ -z "$2" ] && { echo -e "$help"; return 0; }
+            [ -z "$2" ] && { echo -e "$help"; return 1; }
             if _jump_bookmark_exists "$2"; then
-                echo -e "${echo_yellow}No bookmark with this name:${echo_normal}"
-                jump list
-                return 0
-            else
                 sed -e /^"$2"::/d "$JUMP_BOOKMARKS" > "$JUMP_BOOKMARKS.tmp" && mv "$JUMP_BOOKMARKS.tmp" "$JUMP_BOOKMARKS"
                 echo -e "${echo_cyan}Bookmark deleted${echo_normal}"
+            else
+                echo -e "${echo_yellow}No bookmark with this name${echo_normal}"
+                jump list
+                return 1
             fi
             ;;
 
@@ -112,14 +116,14 @@ ${echo_bold_white}jump delete ${echo_underline_white}name${echo_normal} to delet
 
             local bm
 
-            [ -z "$2" ] && { echo -e "$help"; return 0; }
+            [ -z "$2" ] && { echo -e "$help"; return 1; }
             if _jump_bookmark_exists "$2"; then
-                echo -e "${echo_yellow}No bookmark with this name:${echo_normal}"
-                jump list
-                return 0
-            else
                 bm=$(grep "$2" "$JUMP_BOOKMARKS")
                 echo "${bm#*::}"
+            else
+                echo -e "${echo_yellow}No bookmark with this name${echo_normal}"
+                jump list
+                return 1
             fi
             ;;
 
@@ -132,7 +136,7 @@ ${echo_bold_white}jump delete ${echo_underline_white}name${echo_normal} to delet
             else
                 echo -e "${echo_yellow}Unable to find '$1'${echo_normal}"
                 jump list
-                return 0
+                return 1
             fi
             ;;
     esac
