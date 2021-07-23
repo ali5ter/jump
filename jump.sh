@@ -13,9 +13,9 @@ export JUMP_BOOKMARKS=~/.jump/bookmarks
 
 ## Convenience aliases
 alias j='jump'
-alias 'j+'='jump --add'
-alias 'j-'='jump --delete'
-alias jl='jump --list'
+alias 'j+'='jump add'
+alias 'j-'='jump delete'
+alias jl='jump list'
 
 ## Colors
 # shellcheck disable=SC1090
@@ -62,7 +62,7 @@ ${echo_bold_white}jump delete ${echo_underline_white}name${echo_normal} to delet
 
     case "$1" in
 
-        ''|--help|-h)  echo -e "$help" ;;
+        ''|help|--help|-h)  echo -e "$help" ;;
 
         list)
 
@@ -88,7 +88,7 @@ ${echo_bold_white}jump delete ${echo_underline_white}name${echo_normal} to delet
             if  _jump_bookmark_exists "$2"; then
                 # shellcheck disable=SC2154
                 echo -e "${echo_yellow}Bookmark exists:${echo_normal}"
-                jump --list
+                jump list
                 return 0
             else
                 echo "$2"'::'"$PWD" >> "$JUMP_BOOKMARKS"
@@ -100,7 +100,7 @@ ${echo_bold_white}jump delete ${echo_underline_white}name${echo_normal} to delet
             [ -z "$2" ] && { echo -e "$help"; return 0; }
             if _jump_bookmark_exists "$2"; then
                 echo -e "${echo_yellow}No bookmark with this name:${echo_normal}"
-                jump --list
+                jump list
                 return 0
             else
                 sed -e /^"$2"::/d "$JUMP_BOOKMARKS" > "$JUMP_BOOKMARKS.tmp" && mv "$JUMP_BOOKMARKS.tmp" "$JUMP_BOOKMARKS"
@@ -115,7 +115,7 @@ ${echo_bold_white}jump delete ${echo_underline_white}name${echo_normal} to delet
             [ -z "$2" ] && { echo -e "$help"; return 0; }
             if _jump_bookmark_exists "$2"; then
                 echo -e "${echo_yellow}No bookmark with this name:${echo_normal}"
-                jump --list
+                jump list
                 return 0
             else
                 bm=$(grep "$2" "$JUMP_BOOKMARKS")
@@ -131,7 +131,7 @@ ${echo_bold_white}jump delete ${echo_underline_white}name${echo_normal} to delet
                 cd "${bm#*::}" || return 1
             else
                 echo -e "${echo_yellow}Unable to find '$1'${echo_normal}"
-                jump --list
+                jump list
                 return 0
             fi
             ;;
