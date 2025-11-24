@@ -1,3 +1,5 @@
+> **⚠️ Archived 2025-11-24. No longer maintained.**
+
 # 🔖 Jump! A simple directory bookmarking utility for bash
 Bookmark the current directory and jump back to it. Bookmarks stored so you can use across bash sessions.
 
